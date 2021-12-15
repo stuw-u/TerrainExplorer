@@ -1,7 +1,0 @@
-﻿  Renderer.cpp
-  WorldManager.cpp
-  Generating Code...
-C:\Users\Antonin Francoeur\dev\Terrain Explorer\TerrainExplorer\Source\Engine\Renderer.cpp(29): warning C4715: '<lambda_f4ab69b29e87d8e300a25867393a787a>::operator()': not all control paths return a value
-C:\Users\Antonin Francoeur\dev\Terrain Explorer\TerrainExplorer\Source\Engine\Renderer.cpp(42): warning C4715: '<lambda_cb9919581e392928d33862fc55b0027d>::operator()': not all control paths return a value
-C:\Users\Antonin Francoeur\dev\Terrain Explorer\TerrainExplorer\Source\Engine\Renderer.cpp(51): warning C4715: '<lambda_dcf19f0a689e09f0a21d5afab61b32ac>::operator()': not all control paths return a value
-  TerrainExplorer.vcxproj -> C:\Users\Antonin Francoeur\dev\Terrain Explorer\TerrainExplorer\x64\Debug\TerrainExplorer.exe
