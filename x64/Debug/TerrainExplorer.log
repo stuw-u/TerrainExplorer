@@ -1,0 +1,41 @@
+﻿  Main.cpp
+  Application.cpp
+  Chunk.cpp
+  MeshGenerator.cpp
+C:\Users\STUWU\dev\TerrainExplorer\TerrainExplorer\Source\World\Generator\MeshGenerator.cpp(84,105): warning C4244: 'argument': conversion from 'T' to 'uint8_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\STUWU\dev\TerrainExplorer\TerrainExplorer\Source\World\Generator\MeshGenerator.cpp(84,91): warning C4244: 'argument': conversion from 'T' to 'uint8_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\STUWU\dev\TerrainExplorer\TerrainExplorer\Source\World\Generator\MeshGenerator.cpp(84,77): warning C4244: 'argument': conversion from 'T' to 'uint8_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+  WorldManager.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\functional(13,1): warning C4103: alignment changed after including header, may be due to missing #pragma pack(pop)
+C:\Users\STUWU\dev\TerrainExplorer\TerrainExplorer\Source\External\glm\gtx\hash.hpp(23,1): warning C4103: alignment changed after including header, may be due to missing #pragma pack(pop)
+C:\Users\STUWU\dev\TerrainExplorer\TerrainExplorer\Source\World\WorldManager.h(6,1): warning C4103: alignment changed after including header, may be due to missing #pragma pack(pop)
+C:\Users\STUWU\dev\TerrainExplorer\TerrainExplorer\Source\World\WorldManager.cpp(1,1): warning C4103: alignment changed after including header, may be due to missing #pragma pack(pop)
+  Generating Code...
+glfw3.lib(context.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(context.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(init.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(init.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(input.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(input.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(monitor.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(monitor.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(vulkan.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(vulkan.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(window.obj) : warning LNK4099: PDB '' was not found with 'glfw3.lib(window.obj)' or at ''; linking object as if no debug info
+glfw3.lib(win32_init.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_init.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(win32_joystick.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_joystick.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(win32_monitor.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_monitor.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(win32_time.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_time.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(win32_thread.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_thread.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(win32_window.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_window.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(wgl_context.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(wgl_context.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(egl_context.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(egl_context.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(osmesa_context.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(osmesa_context.obj)' or at 'C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\glfw3.pdb'; linking object as if no debug info
+  TerrainExplorer.vcxproj -> C:\Users\STUWU\dev\TerrainExplorer\x64\Debug\TerrainExplorer.exe
