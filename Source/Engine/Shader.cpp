@@ -34,7 +34,7 @@ SurfaceShaderProgramSource SurfaceShader::GetParsedSurfaceShader () {
 	std::ifstream stream;
 	stream.open(m_filepath);
 	if(!stream) {
-		std::cerr << "Failed to load shader at " << std::endl;
+		std::cerr << "Failed to find shader at " << m_filepath << std::endl;
 	}
 
 	enum class SubShaderType {

@@ -17,7 +17,7 @@ const unsigned int SCREEN_HEIGHT = 600;
 
 
 
-Application::Application () {
+Application::Application () : camPos(), camRot() {
 
 	// Initial the window/input library called glfw.
 	glfwInit();

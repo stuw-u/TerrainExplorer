@@ -1,6 +1,6 @@
 #include "WorldManager.h"
 #include <iostream>
-#define BLOCK_LIST_FILEPATH "../../TerrainExplorer/Ressources/Data/Block/BlockList.txt"
+#define BLOCK_LIST_FILEPATH "../../Ressources/Data/Block/BlockList.txt"
 
 
 void WorldManager::Init () {

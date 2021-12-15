@@ -3,14 +3,16 @@
 #include <iostream>
 #include "Camera.h"
 
-#define DEBUG_SHADER_FILEPATH "../../TerrainExplorer/Ressources/Shaders/Default_Surface.glsl"
+#define DEBUG_SHADER_FILEPATH "../../Ressources/Shaders/Default_Surface.glsl"
 
 Renderer::Renderer() {
 	m_renderables = std::vector<IRenderable*>();
 	testShader = nullptr;
 }
 
-void Renderer::message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar const* message, void const* user_param)
+
+
+void APIENTRY Renderer::message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar const* message, void const* user_param)
 {
 	if(severity == GL_DEBUG_SEVERITY_NOTIFICATION) return;
 

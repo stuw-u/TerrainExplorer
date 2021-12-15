@@ -27,6 +27,6 @@ public:
 
 	void SetRenderables (std::vector<IRenderable*> renderables);
 private:
-	static void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar const* message, void const* user_param);
+	static void APIENTRY message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar const* message, void const* user_param);
 
 };
