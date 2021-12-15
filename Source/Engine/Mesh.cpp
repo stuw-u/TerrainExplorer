@@ -3,33 +3,49 @@
 #include <iostream>
 #include "RendererUtils.h"
 
-Mesh::~Mesh () {
+void Mesh::Dispose () {
 	// Dispose GPU data
 	// Delete buffer
 	if(vertsBuffer != 0) { 
-		glDeleteBuffers(1, &vertsBuffer);
+		GLTry(glDeleteBuffers(1, &vertsBuffer));
+		vertsBuffer = 0;
 	}
 	if(indexBuffer != 0) {
-		glDeleteBuffers(1, &indexBuffer);
+		GLTry(glDeleteBuffers(1, &indexBuffer));
+		indexBuffer = 0;
+	}
+	if(vaoID != 0) {
+		GLTry(glDeleteVertexArrays(1, &vaoID));
+		vaoID = 0;
 	}
 }
 
-void Mesh::Render() const {
+
+
+void Mesh::Render(SurfaceShader& shader, const glm::mat4x4& viewProjection, glm::vec3 position) const {
 	if(!IsCompleted()) {
 		std::cout << "Cannot draw mesh, some buffers are uninitialised" << std::endl;
 		return;
 	}
 
+	//shader.SetMVPMatrix(glm::translate(glm::identity<glm::mat4x4>(), position), viewProjection);
+	shader.SetMVPMatrix(glm::translate(glm::identity<glm::mat4x4>(), position), viewProjection);
 	GLTry(glBindVertexArray(vaoID));
 	GLTry(glDrawElements(GL_TRIANGLES, indexBufferSize, GL_UNSIGNED_INT, nullptr));
 }
 
 void Mesh::SetData (std::vector<VertexData>& verticies, std::vector<uint32_t>& indicies) {
 	if(vertsBuffer != 0) {
-		glDeleteBuffers(1, &vertsBuffer);
+		GLTry(glDeleteBuffers(1, &vertsBuffer));
+		vertsBuffer = 0;
 	}
 	if(indexBuffer != 0) {
-		glDeleteBuffers(1, &indexBuffer);
+		GLTry(glDeleteBuffers(1, &indexBuffer));
+		indexBuffer = 0;
+	}
+	if(vaoID != 0) {
+		GLTry(glDeleteVertexArrays(1, &vaoID));
+		vaoID = 0;
 	}
 
 	indexBufferSize = indicies.size() * sizeof(uint32_t);
@@ -72,5 +88,5 @@ bool Mesh::IsAllocated () const {
 }
 
 bool Mesh::IsCompleted () const {
-	return vertsBuffer && vertsBufferSize && indexBuffer && indexBufferSize;
+	return vertsBuffer && vertsBufferSize && indexBuffer && indexBufferSize && vaoID;
 }

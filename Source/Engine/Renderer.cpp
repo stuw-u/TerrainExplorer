@@ -12,6 +12,8 @@ Renderer::Renderer() {
 
 void Renderer::message_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar const* message, void const* user_param)
 {
+	if(severity == GL_DEBUG_SEVERITY_NOTIFICATION) return;
+
 	auto const src_str = [source]() {
 		switch(source)
 		{
@@ -72,10 +74,10 @@ void Renderer::Render (GLFWwindow* window, Camera* camera) {
 
 	glEnable(GL_DEPTH_TEST);
 	testShader->Bind();
-	testShader->SetProjectionViewMatrix(camera->GetProjectionViewMatrix());
+	glm::mat4x4 viewProjection = camera->GetProjectionViewMatrix();
 
 	for(auto element : m_renderables) {
-		element->Render();
+		element->Render(*testShader, viewProjection);
 	}
 
 	testShader->Unbind();

@@ -121,8 +121,8 @@ void SurfaceShader::Bind() const { GLTry(glUseProgram(m_RendererID)); }
 void SurfaceShader::Unbind() const { GLTry(glUseProgram(0)); }
 
 
-void SurfaceShader::SetProjectionViewMatrix (const glm::mat4x4 mat) {
-	SetUniformMat4f(std::string("projectionMatrix"), mat);
+void SurfaceShader::SetMVPMatrix (const glm::mat4x4 model, const glm::mat4x4 viewProjection) {
+	SetUniformMat4f(std::string("MVP_Matrix"), viewProjection * model);
 }
 
 void SurfaceShader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3) {

@@ -25,7 +25,7 @@ public:
 	void Bind() const;
 	void Unbind() const;
 
-	void SetProjectionViewMatrix (const glm::mat4x4);
+	void SetMVPMatrix (const glm::mat4x4 model, const glm::mat4x4 viewProjection);
 	void SetUniform4f(const std::string& name, float v0, float v2, float v3, float v4);
 	void SetUniformMat4f(const std::string& name, glm::mat4x4 mat);
 private:

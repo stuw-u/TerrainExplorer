@@ -27,7 +27,7 @@ public:
 				for(uint8_t z = 0; z < m_size; z++) {
 
 					float randomValue = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-					if(randomValue > 0.3f) {
+					if(randomValue < (static_cast<float>(y) / m_size)) {
 						chunk->data.SetCell(x, y, z, empty);
 					}
 					else {

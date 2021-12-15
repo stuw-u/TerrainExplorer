@@ -27,5 +27,5 @@ public:
 
 	Chunk* CreateChunk(glm::ivec3 chunkPos);
 
-	void Render() override;
+	void Render(SurfaceShader& shader, const glm::mat4x4& viewProjection) override;
 };

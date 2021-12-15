@@ -1,7 +1,9 @@
 #pragma once
 #include "ChunkData.h"
 #include "../../Engine/Mesh.h"
+#include "../../Engine/Shader.h"
 #include "../../External/glm/vec3.hpp"
+#include "../../External/glm/mat4x4.hpp"
 
 class Chunk {
 private:
@@ -17,6 +19,6 @@ public:
 	~Chunk();
 
 	void SetMesh (Mesh mesh);
-	bool Render() const;
+	bool Render(SurfaceShader& shader, const glm::mat4x4& viewProjection) const;
 	
 };

@@ -17,6 +17,7 @@ class MeshGenerator {
 
     static const glm::vec3 enumToVert[6][4];
     static const glm::vec3 enumToNormal[6];
+    static const glm::vec3 enumToColor[6];
 
     void AddFace (ChunkMeshData& mdat, glm::vec3 blockPos, FaceDirection dir);
 

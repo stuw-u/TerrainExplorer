@@ -9,10 +9,14 @@ void WorldManager::Init () {
 	m_chunkDataGenerator = ChunkDataGenerator(0, CHUNK_SIZE, m_blockAssetManager);
 	m_chunks = std::unordered_map<glm::ivec3, Chunk*>(512);
 
-	// Create a debug chunk for testing
-	Chunk* chunk = CreateChunk(glm::ivec3(0, 0, 0));
-	m_chunkDataGenerator.GenerateChunkData(chunk);
-	chunk->SetMesh(m_meshGenerator.GenerateChunkMesh(chunk));
+	// Create a debug chunks for testing
+	for(int x = 0; x < 32; x++) {
+		for(int z = 0; z < 32; z++) {
+			Chunk* chunk = CreateChunk(glm::ivec3(x, 0, z));
+			m_chunkDataGenerator.GenerateChunkData(chunk);
+			chunk->SetMesh(m_meshGenerator.GenerateChunkMesh(chunk));
+		}
+	}
 }
 
 WorldManager::~WorldManager () {
@@ -25,8 +29,8 @@ Chunk* WorldManager::CreateChunk (glm::ivec3 chunkPos) {
 	return newChunk;
 }
 
-void WorldManager::Render() {
+void WorldManager::Render(SurfaceShader& shader, const glm::mat4x4& viewProjection) {
 	for(auto& element : m_chunks) {
-		element.second->Render();
+		element.second->Render(shader, viewProjection);
 	}
 }
