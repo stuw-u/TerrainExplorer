@@ -20,6 +20,8 @@ private:
 
 	std::unordered_map<glm::ivec3, Chunk*> m_chunks;
 
+	std::vector<Chunk*> GetChunkNeighbours (glm::ivec3 chunkPosition);
+
 public:
 	~WorldManager();
 

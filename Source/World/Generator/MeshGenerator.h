@@ -8,7 +8,7 @@
 enum class FaceDirection {Pos_X, Neg_X, Pos_Y, Neg_Y, Pos_Z, Neg_Z};
 
 struct ChunkMeshData {
-	std::vector<VertexData> verticies; // Could be optimized further by a lot (Flat)
+	std::vector<VertexData> verticies; // Could be optimized further? (Flat)
 	std::vector<uint32_t> indicies;
     uint32_t indiciesCount = 0;
 };
@@ -17,10 +17,13 @@ class MeshGenerator {
 
     static const glm::vec3 enumToVert[6][4];
     static const glm::vec3 enumToNormal[6];
-    static const glm::vec3 enumToColor[6];
 
     void AddFace (ChunkMeshData& mdat, glm::vec3 blockPos, FaceDirection dir);
 
+    BlockAsset* GetCellInChunks (glm::ivec3 blockPos, Chunk* chunk, std::vector<Chunk*>& neighbours);
+
 public:
-    Mesh GenerateChunkMesh(Chunk* chunk);
+    static const glm::ivec3 enumToIntNormal[6];
+
+    Mesh GenerateChunkMesh(Chunk* chunk, std::vector<Chunk*>& neighbours);
 };

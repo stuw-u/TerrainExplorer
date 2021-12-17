@@ -23,7 +23,7 @@ SurfaceShader::SurfaceShader(const std::string& filepath)
 }
 
 SurfaceShader::~SurfaceShader () {
-	GLTry(glDeleteProgram(m_RendererID));
+	glDeleteProgram(m_RendererID);
 }
 
 /// <summary>
@@ -71,24 +71,24 @@ SurfaceShaderProgramSource SurfaceShader::GetParsedSurfaceShader () {
 /// Sends the shader to be compiled by opengl and prints any compile error in the console.
 /// </summary>
 int SurfaceShader::CompileShader (unsigned int type, const std::string& source) {
-	GLTry(unsigned int id = glCreateShader(type));
+	unsigned int id = glCreateShader(type);
 	const char* src = source.c_str();
-	GLTry(glShaderSource(id, 1, &src, nullptr));
-	GLTry(glCompileShader(id));
+	glShaderSource(id, 1, &src, nullptr);
+	glCompileShader(id);
 
 	int result;
-	GLTry(glGetShaderiv(id, GL_COMPILE_STATUS, &result));
+	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
 
 	// If failed to compile shader
 	if(result == GL_FALSE) { 
 
 		int length;
-		GLTry(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
+		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
 		char* message = (char*)alloca(length * sizeof(char));
-		GLTry(glGetShaderInfoLog(id, length, &length, message));
+		glGetShaderInfoLog(id, length, &length, message);
 		std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader." << std::endl;
 		std::cout << message << std::endl;
-		GLTry(glDeleteShader(id));
+		glDeleteShader(id);
 		return 0;
 
 	}
@@ -101,17 +101,17 @@ int SurfaceShader::CompileShader (unsigned int type, const std::string& source) 
 /// Links frag. and vert. shader into a surface shader.
 /// </summary>
 unsigned int SurfaceShader::CreateSurfaceShader (SurfaceShaderProgramSource& shaderSurfaceProgramSource) {
-	GLTry(unsigned int program = glCreateProgram());
+	unsigned int program = glCreateProgram();
 	unsigned int vs = CompileShader(GL_VERTEX_SHADER, shaderSurfaceProgramSource.vertexSource);
 	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, shaderSurfaceProgramSource.fragmentSource);
 
-	GLTry(glAttachShader(program, vs));
-	GLTry(glAttachShader(program, fs));
-	GLTry(glLinkProgram(program));
-	GLTry(glValidateProgram(program));
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glLinkProgram(program);
+	glValidateProgram(program);
 
-	GLTry(glDeleteShader(vs));
-	GLTry(glDeleteShader(fs));
+	glDeleteShader(vs);
+	glDeleteShader(fs);
 
 	return program;
 }

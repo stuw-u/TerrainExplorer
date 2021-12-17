@@ -24,7 +24,7 @@ void APIENTRY Renderer::message_callback(GLenum source, GLenum type, GLuint id, 
 		case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SHADER COMPILER";
 		case GL_DEBUG_SOURCE_THIRD_PARTY: return "THIRD PARTY";
 		case GL_DEBUG_SOURCE_APPLICATION: return "APPLICATION";
-		case GL_DEBUG_SOURCE_OTHER: return "OTHER";
+		default : case GL_DEBUG_SOURCE_OTHER: return "OTHER";
 		}
 	}();
 
@@ -37,7 +37,7 @@ void APIENTRY Renderer::message_callback(GLenum source, GLenum type, GLuint id, 
 		case GL_DEBUG_TYPE_PORTABILITY: return "PORTABILITY";
 		case GL_DEBUG_TYPE_PERFORMANCE: return "PERFORMANCE";
 		case GL_DEBUG_TYPE_MARKER: return "MARKER";
-		case GL_DEBUG_TYPE_OTHER: return "OTHER";
+		default: case GL_DEBUG_TYPE_OTHER: return "OTHER";
 		}
 	}();
 
@@ -47,6 +47,7 @@ void APIENTRY Renderer::message_callback(GLenum source, GLenum type, GLuint id, 
 		case GL_DEBUG_SEVERITY_LOW: return "LOW";
 		case GL_DEBUG_SEVERITY_MEDIUM: return "MEDIUM";
 		case GL_DEBUG_SEVERITY_HIGH: return "HIGH";
+		default: return "UNKNOWN";
 		}
 	}();
 	std::cout << src_str << ", " << type_str << ", " << severity_str << ", " << id << ": " << message << '\n';

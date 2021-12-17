@@ -25,7 +25,7 @@ out vec4 color;
 
 void main () {
     //float c = frct(fragCoord/iResolution.xy) - frct((fragCoord+CONT)/iResolution.xy) + 0.5;
-    float c = max(0.1, dot(inNormal, -normalize(vec3(0.5, -1.0, 0.75))));
+    float c = abs(dot(inNormal, -normalize(vec3(0.5, -1.0, 0.75))));
 
 	color = vec4(inColor * c, 1.0);
 }

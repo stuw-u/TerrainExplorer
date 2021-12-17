@@ -44,20 +44,20 @@ public:
 		}
 
 		
-		m_cells[x + y * static_cast<uint64_t>(m_size) + z * static_cast<uint64_t>(m_size) * static_cast<uint64_t>(m_size)] = m_blockIdToPaletteIndex[blockAsset->id];
+		m_cells[x + y * static_cast<uint64_t>(m_size) + z * static_cast<uint64_t>(m_size) * m_size] = m_blockIdToPaletteIndex[blockAsset->id];
 
 	}
 
 	BlockAsset* GetCell(uint8_t x, uint8_t y, uint8_t z) {
-		return m_context->GetBlockAssetFromIndex(m_palette[m_cells[x + y * static_cast<uint64_t>(m_size)+z * static_cast<uint64_t>(m_size) * static_cast<uint64_t>(m_size)]]);
-	}
-
-	BlockAsset* GetCellCheck(uint8_t x, uint8_t y, uint8_t z) {
-		if(x < 0 || x >= m_size || y < 0 || y >= m_size || z < 0 || z >= m_size) return nullptr;
-		return GetCell(x, y, z);
+		return m_context->GetBlockAssetFromIndex(m_palette[m_cells[
+			x + y * static_cast<uint64_t>(m_size) + z * static_cast<uint64_t>(m_size) * m_size]]);
 	}
 
 	int GetPaletteSize () {
 		return static_cast<int>(m_palette.size());
+	}
+
+	int size() {
+		return m_size;
 	}
 };
