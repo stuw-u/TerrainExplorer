@@ -10,9 +10,10 @@ out vec3 inNormal;
 out vec3 inColor;
 
 void main () {
+    float light = 0.7 + (dot(normal, -normalize(vec3(0.5, -1.0, 0.75)))) * 0.3;
     gl_Position = MVP_Matrix * vec4(position, 1.0);
     inNormal = normal;
-    inColor = color;
+    inColor = color * light;
 }
 
 #shader fragment
@@ -24,8 +25,5 @@ in vec3 inColor;
 out vec4 color;
 
 void main () {
-    //float c = frct(fragCoord/iResolution.xy) - frct((fragCoord+CONT)/iResolution.xy) + 0.5;
-    float c = abs(dot(inNormal, -normalize(vec3(0.5, -1.0, 0.75))));
-
-	color = vec4(inColor * c, 1.0);
+	color = vec4(inColor, 1.0);
 }

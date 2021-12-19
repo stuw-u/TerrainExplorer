@@ -11,6 +11,7 @@
 #include "../Engine/IRenderable.h"
 
 #define CHUNK_SIZE 16
+#define GRID_SIZE 4
 
 class WorldManager : public IRenderable {
 private:
@@ -21,6 +22,7 @@ private:
 	std::unordered_map<glm::ivec3, Chunk*> m_chunks;
 
 	std::vector<Chunk*> GetChunkNeighbours (glm::ivec3 chunkPosition);
+	std::vector<Chunk*> GetChunkGridAdjacent (glm::ivec3 chunkPosition);
 
 public:
 	~WorldManager();

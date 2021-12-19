@@ -1,5 +1,6 @@
 #pragma once
 #include "ChunkData.h"
+#include "ChunkGridData.h"
 #include "../../Engine/Mesh.h"
 #include "../../Engine/Shader.h"
 #include "../../External/glm/vec3.hpp"
@@ -11,11 +12,12 @@ private:
 	Mesh m_mesh;
 public:
 	ChunkData data;
+	ChunkGridData gridData;
 	glm::ivec3 chunkPosition;
 
 public:
 	Chunk() = delete;
-	Chunk(uint8_t size, glm::ivec3 chunkPosition, BlockAssetManager* context);
+	Chunk(uint8_t size, uint8_t gridSize, glm::ivec3 chunkPosition, BlockAssetManager* context);
 	~Chunk();
 
 	void SetMesh (Mesh mesh);

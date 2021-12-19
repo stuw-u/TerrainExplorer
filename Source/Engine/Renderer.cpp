@@ -73,7 +73,7 @@ void Renderer::Render (GLFWwindow* window, Camera* camera) {
 
 	// Clear buffer with color
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	glClearColor(0.0f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0.167f, 0.612f, 0.702f, 1.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	testShader->Bind();

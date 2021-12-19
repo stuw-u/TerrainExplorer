@@ -1,8 +1,9 @@
 #include "Chunk.h"
 #include <iostream>
 
-Chunk::Chunk(uint8_t size, glm::ivec3 chunkPosition, BlockAssetManager* context):
-	data(size, context), 
+Chunk::Chunk(uint8_t size, uint8_t gridSize, glm::ivec3 chunkPosition, BlockAssetManager* context):
+	data(size, context),
+	gridData(gridSize),
 	m_size(size), 
 	chunkPosition(chunkPosition),
 	m_mesh() {

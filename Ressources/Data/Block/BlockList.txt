@@ -1,17 +1,17 @@
 code_name:stone
 texture_index:0
-color_r:103
-color_g:107
-color_b:110
+color_r:132
+color_g:129
+color_b:135
 
 code_name:grass
 texture_index:1
-color_r:82
-color_g:201
-color_b:71
+color_r:59
+color_g:127
+color_b:21
 
 code_name:dirt
 texture_index:2
-color_r:125
-color_g:98
-color_b:61
+color_r:143
+color_g:96
+color_b:59

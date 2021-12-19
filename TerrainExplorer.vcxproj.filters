@@ -51,6 +51,9 @@
     <ClCompile Include="Source\World\Chunk\Chunk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\World\Generator\ChunkDataGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\Renderer.h">
@@ -102,6 +105,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\RendererUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External\FastNoiseLite\FastNoiseLite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\World\Generator\Utils\TerrainUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\External\FastNoiseLite\FastNoiseLiteStatic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\World\Chunk\ChunkGridData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
