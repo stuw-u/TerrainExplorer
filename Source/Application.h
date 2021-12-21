@@ -3,7 +3,7 @@
 #include "Engine/Renderer.h"
 #include "Engine/IRenderable.h"
 #include "Engine/Camera.h"
-#include "World/WorldManager.h"
+#include "World/World.h"
 #include "External/glm/gtc/quaternion.hpp"
 #include "External/glm/gtx/quaternion.hpp"
 #include "External/glm/vec3.hpp"
@@ -13,12 +13,13 @@ private:
 	GLFWwindow* m_window;
 	Renderer m_renderer;
 	std::vector<IRenderable*> m_renderables;
-	WorldManager m_worldManager;
+	World m_worldManager;
 
 	double deltaTime = 0.1;
 	double fixedDeltaTime = 0.1;
 
 	glm::dvec3 camPos;
+	glm::dvec3 lastPhyCamPos;
 	glm::dvec3 camRot;
 	bool isCursorDisabled = true;
 	double lastCurX = 0.0;

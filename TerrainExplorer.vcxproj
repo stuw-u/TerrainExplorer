@@ -162,22 +162,27 @@
     <ClCompile Include="Source\Engine\Camera.cpp" />
     <ClCompile Include="Source\Engine\Mesh.cpp" />
     <ClCompile Include="Source\Engine\Renderer.cpp" />
+    <ClCompile Include="Source\Math\AABB.cpp" />
+    <ClCompile Include="Source\Math\Frustrum.cpp" />
     <ClCompile Include="Source\Engine\Shader.cpp" />
     <ClCompile Include="Source\Math\Matrix.cpp" />
     <ClCompile Include="Source\World\Asset\BlockAssetManager.cpp" />
     <ClCompile Include="Source\World\Chunk\Chunk.cpp" />
     <ClCompile Include="Source\World\Generator\ChunkDataGenerator.cpp" />
     <ClCompile Include="Source\World\Generator\MeshGenerator.cpp" />
-    <ClCompile Include="Source\World\WorldManager.cpp" />
+    <ClCompile Include="Source\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Engine\Camera.h" />
+    <ClInclude Include="Source\Engine\Chrono.h" />
     <ClInclude Include="Source\Engine\Display.h" />
     <ClInclude Include="Source\Engine\IRenderable.h" />
     <ClInclude Include="Source\Engine\Mesh.h" />
     <ClInclude Include="Source\Engine\Renderer.h" />
     <ClInclude Include="Source\Engine\RendererUtils.h" />
+    <ClInclude Include="Source\Math\AABB.h" />
+    <ClInclude Include="Source\Math\Frustrum.h" />
     <ClInclude Include="Source\Engine\Shader.h" />
     <ClInclude Include="Source\Engine\VertexData.h" />
     <ClInclude Include="Source\External\FastNoiseLite\FastNoiseLite.h" />
@@ -189,9 +194,10 @@
     <ClInclude Include="Source\World\Chunk\ChunkData.h" />
     <ClInclude Include="Source\World\Chunk\ChunkGridData.h" />
     <ClInclude Include="Source\World\Generator\ChunkDataGenerator.h" />
+    <ClInclude Include="Source\World\Generator\ChunkMeshData.h" />
     <ClInclude Include="Source\World\Generator\MeshGenerator.h" />
     <ClInclude Include="Source\World\Generator\Utils\TerrainUtils.h" />
-    <ClInclude Include="Source\World\WorldManager.h" />
+    <ClInclude Include="Source\World\World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ressources\Shaders\Default_Surface.glsl" />

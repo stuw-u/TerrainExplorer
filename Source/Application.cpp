@@ -79,11 +79,30 @@ void Application::RunGameLoop () {
 		deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - previousTime).count() / 1000000000.0;
 		fixedDeltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - previousFixedTime).count() / 1000000000.0;
 		previousTime = currentTime;
+
+		if(deltaTime != 0.0f) {
+			//std::printf("FPS: %f\n", (1.0 / deltaTime));
+		}
 		
+		// Fixed frame loop
 		if(fixedDeltaTime >= fixedSecondPerFrame) {
 			previousFixedTime = currentTime;
 
-			// Run simulation
+			// Check if the player had moved since last frame
+			if(camPos != lastPhyCamPos) {
+				glm::ivec3 blockPos = glm::floor(camPos);
+				glm::ivec3 lastBlockPos = glm::floor(lastPhyCamPos);
+				if(blockPos != lastBlockPos) {
+
+					// Update the world manager if that's the case
+					m_worldManager.OnPlayerMove(blockPos);
+				}
+				lastPhyCamPos = camPos;
+			}
+
+			m_worldManager.OnUpdate();
+
+			// Displays fixed update accuracy
 			//std::cout << "Fixed delta time: " << fixedDeltaTime << std::endl;
 		}
 
@@ -133,6 +152,8 @@ void Application::ProcessInputs (GLFWwindow* window) {
 	}
 	wasEscapePressed = isEscapePressed;
 
+
+	// Camera navigation
 	glm::dvec3 localDelta = glm::dvec3(0.0, 0.0, 0.0);
 	if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		localDelta.z -= 8.0 * deltaTime;
@@ -162,9 +183,11 @@ void Application::ProcessInputs (GLFWwindow* window) {
 		camRot.y = glm::mod(camRot.y, 360.0);
 	}
 
-	camPos += (glm::quat(glm::dvec3(-glm::radians(camRot.x), -glm::radians(camRot.y), 0)) * (glm::vec3)localDelta);
+	glm::quat quatDir = glm::quat(glm::dvec3(-glm::radians(camRot.x), -glm::radians(camRot.y), 0));
+	glm::vec3 dir = quatDir * glm::vec3(0, 0, 1);
+	camPos += (quatDir * (glm::vec3)localDelta);
 
-	//std::cout << cam_x << ", " << cam_y << ", " << cam_z << std::endl;
+	//std::printf("Direction: (%f, %f, %f)\n", dir.x, dir.y, dir.z);
 }
 
 Camera& Application::GetCamera () {

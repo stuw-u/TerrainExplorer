@@ -80,7 +80,7 @@ void Renderer::Render (GLFWwindow* window, Camera* camera) {
 	glm::mat4x4 viewProjection = camera->GetProjectionViewMatrix();
 
 	for(auto element : m_renderables) {
-		element->Render(*testShader, viewProjection);
+		element->Render(*testShader, viewProjection, camera->GetFrustrum());
 	}
 
 	testShader->Unbind();

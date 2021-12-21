@@ -29,8 +29,13 @@ void Camera::Update (glm::dvec3 position, glm::vec3 rotation, glm::ivec2 display
 	m_projectionMatrix = CreateProjMatrix(m_params, displaySize);
 	m_viewMatrix = CreateViewMatrix(*this);
 	m_projectionViewMatrix = m_projectionMatrix * m_viewMatrix;
+	m_frustrum.SetMatrix(m_projectionViewMatrix);
 }
 
 glm::mat4x4 Camera::GetProjectionViewMatrix() {
 	return m_projectionViewMatrix;
+}
+
+const Frustum& Camera::GetFrustrum() const {
+	return m_frustrum;
 }

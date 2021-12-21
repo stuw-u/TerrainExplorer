@@ -76,6 +76,11 @@ void Mesh::SetData (std::vector<VertexData>& verticies, std::vector<uint32_t>& i
 		/*Att.Index*/2, /*ValueCount*/3, /*Type*/GL_FLOAT, /*Normalize*/false,
 		/*BytesPerVert*/sizeof(VertexData), /*Offset*/reinterpret_cast<const void*>(offsetof(VertexData, normal))
 	);
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(
+		/*Att.Index*/3, /*ValueCount*/1, /*Type*/GL_FLOAT, /*Normalize*/false,
+		/*BytesPerVert*/sizeof(VertexData), /*Offset*/reinterpret_cast<const void*>(offsetof(VertexData, ao))
+	);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBufferSize, &indicies[0], GL_STATIC_DRAW);

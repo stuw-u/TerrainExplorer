@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Math/Matrix.h"
+#include "../Math/Frustrum.h"
 #include "../External/glm/mat4x4.hpp"
 #include "../External/glm/vec3.hpp"
 
@@ -19,6 +20,8 @@ private:
 	glm::mat4x4 m_viewMatrix;
 	glm::mat4x4 m_projectionMatrix;
 	glm::mat4x4 m_projectionViewMatrix;
+	Frustum m_frustrum;
+
 	// TODO: Add frustrum for culling
 public:
 	Camera(CameraParams params);
@@ -32,4 +35,6 @@ public:
 	void Update (glm::dvec3 position, glm::vec3 rotation, glm::ivec2 displaySize);
 
 	glm::mat4x4 GetProjectionViewMatrix();
+
+	const Frustum& GetFrustrum() const;
 };

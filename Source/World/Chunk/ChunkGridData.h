@@ -25,9 +25,13 @@ public:
 		return m_derivatives[index];
 	}
 
-	void SetCell(uint8_t x, uint8_t y, uint8_t z, float value, glm::lowp_vec3 derivative) {
+	void SetCell(uint8_t x, uint8_t y, uint8_t z, float value) {
 		long long index = x + y * static_cast<uint64_t>(m_size) + z * static_cast<uint64_t>(m_size) * m_size;
 		m_cells[index] = value;
+	}
+
+	void SetDerivative(uint8_t x, uint8_t y, uint8_t z, glm::lowp_vec3 derivative) {
+		long long index = x + y * static_cast<uint64_t>(m_size) + z * static_cast<uint64_t>(m_size) * m_size;
 		m_derivatives[index] = derivative;
 	}
 };

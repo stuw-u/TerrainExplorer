@@ -9,7 +9,6 @@ private:
 	int m_seed;
 	BlockAssetManager* m_blockAssetManager;
 
-	static const glm::vec3 enumToNormal[6];
 
 
 	float GetCellValue(int x, int y, int z, std::vector<Chunk*>& chunks);
@@ -19,8 +18,6 @@ private:
 	float SampleGridValue (float x, float y, float z, std::vector<Chunk*>& chunks);
 
 	glm::lowp_vec3 SampleGridNormal (float x, float y, float z, std::vector<Chunk*>& chunks);
-
-	static const glm::vec3 samples[7];
 
 public:
 	ChunkDataGenerator(
