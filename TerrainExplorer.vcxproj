@@ -196,6 +196,8 @@
     <ClInclude Include="Source\World\Generator\ChunkDataGenerator.h" />
     <ClInclude Include="Source\World\Generator\ChunkMeshData.h" />
     <ClInclude Include="Source\World\Generator\MeshGenerator.h" />
+    <ClInclude Include="Source\World\Generator\NoiseFunctions\INoiseFunction.h" />
+    <ClInclude Include="Source\World\Generator\NoiseFunctions\TestNoise.h" />
     <ClInclude Include="Source\World\Generator\Utils\TerrainUtils.h" />
     <ClInclude Include="Source\World\World.h" />
   </ItemGroup>

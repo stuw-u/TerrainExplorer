@@ -18,7 +18,7 @@
 #include <thread>
 #include <mutex>
 
-#define MAX_MESH 32
+#define MAX_MESH_IN_APPLY_QUEUE 256
 #define CHUNK_SIZE 16
 #define GRID_SIZE 4
 
@@ -35,13 +35,13 @@ private:
 	std::atomic<bool> m_chunkPosChangedSync;
 	std::atomic<glm::ivec3> m_lastChunkPosSync;
 	std::thread m_genThread;
-	std::vector<glm::ivec3> m_chunkToUpdateMesh;
-	std::vector<glm::ivec3> m_chunkToDelete;
-	std::atomic<int> m_estimatedChunkInMeshQueue;
-	std::queue<glm::ivec3> m_missingMesh;
+	std::vector<glm::ivec3> m_applyMeshQueue;
+	std::vector<Mesh> m_disposeMeshQueue;
+	std::queue<glm::ivec3> m_missingMeshQueue;
 
-	std::mutex m_meshUpdateLock;
-	std::mutex m_deleteLock;
+	std::mutex m_meshApplyLock;
+	std::mutex m_disposeMeshQueueLock;
+	std::mutex m_deleteCreateChunkLock;
 
 	std::vector<Chunk*> GetChunkNeighbours (glm::ivec3 chunkPosition, int& minState);
 

@@ -13,11 +13,14 @@ Chunk::Chunk(uint8_t size, uint8_t gridSize, glm::ivec3 chunkPosition, BlockAsse
 }
 
 Chunk::~Chunk() {
-	m_mesh.Dispose();
 }
 
 void Chunk::SetMesh(Mesh mesh) {
 	m_mesh = mesh;
+}
+
+Mesh Chunk::GetMesh() {
+	return m_mesh;
 }
 
 bool Chunk::Render(SurfaceShader& shader, const glm::mat4x4& viewProjection) {

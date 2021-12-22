@@ -137,6 +137,12 @@
     <ClInclude Include="Source\World\Generator\ChunkMeshData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\World\Generator\NoiseFunctions\TestNoise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\World\Generator\NoiseFunctions\INoiseFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Ressources\Shaders\Default_Surface.glsl" />

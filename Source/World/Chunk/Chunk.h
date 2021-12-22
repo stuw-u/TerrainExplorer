@@ -42,6 +42,7 @@ public:
 
 
 	void SetMesh (Mesh mesh);
+	Mesh GetMesh ();
 	bool Render(SurfaceShader& shader, const glm::mat4x4& viewProjection);
 	bool CanRender();
 	const AABB& GetBox() const;

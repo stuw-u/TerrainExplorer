@@ -2,6 +2,7 @@
 #include "MeshGenerator.h"
 #include "../../External/FastNoiseLite/FastNoiseLite.h"
 #include "Utils/TerrainUtils.h"
+#include "NoiseFunctions/TestNoise.h"
 #include <vector>
 
 
@@ -18,64 +19,19 @@ void ChunkDataGenerator::GridDataPass(Chunk* chunk) {
 	int blockPerGrid = chunkSize / m_gridSize;
 
 	// Noise samplers
-	FastNoiseLite baseNoise;
-	baseNoise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
-	baseNoise.SetFractalType(FastNoiseLite::FractalType_FBm);
-	baseNoise.SetFractalOctaves(7);
-	baseNoise.SetFractalGain(0.65f);
-	baseNoise.SetFrequency(0.002f);
-	FastNoiseLite cellNoise;
-	cellNoise.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
-	cellNoise.SetCellularReturnType(FastNoiseLite::CellularReturnType_Distance);
-	cellNoise.SetFrequency(0.02f);
-	std::vector<FastNoiseLite> offsets(8);
-	for(int i = 0; i < 8; i++) {
-		FastNoiseLite noiseOffset;
-		noiseOffset.SetSeed(i + 1);
-		noiseOffset.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
-		noiseOffset.SetFractalType(FastNoiseLite::FractalType_FBm);
-		noiseOffset.SetFractalOctaves(1);
-		offsets[i] = noiseOffset;
-	}
-	for(int i = 0; i < 3; i++) {
-		offsets[i * 2].SetFrequency(0.002f);
-		offsets[i * 2 + 1].SetFrequency(0.006f);
-	}
-	for(int i = 6; i < 8; i++) {
-		offsets[i].SetFractalOctaves(3);
-		offsets[i].SetFrequency(0.005f);
-	}
+	YosemiteValley_Context sampler0;
 
 	for(uint8_t i = 0; i < m_gridSize; i++) {
 		for(uint8_t j = 0; j < m_gridSize; j++) {
 			for(uint8_t k = 0; k < m_gridSize; k++) {
 
 				double x = i * blockPerGrid + chunkPos.x * chunkSize,
-					y = j * blockPerGrid + chunkPos.y * chunkSize,
-					z = k * blockPerGrid + chunkPos.z * chunkSize;
+					  y = j * blockPerGrid + chunkPos.y * chunkSize,
+					  z = k * blockPerGrid + chunkPos.z * chunkSize;
 
-				double beachFade = TUtils::invLerpClamp(y, 0, 30);
+				
 
-				double offsetX = offsets[6].GetNoise(x, y, z) * 0.4,
-					offsetZ = offsets[7].GetNoise(x, y, z) * 0.4;
-
-				float value = (
-					(baseNoise.GetNoise(x + offsetX, z + offsetZ) - 0.8) +
-					(1.0 - cellNoise.GetNoise(x + offsetX * 0.5, z + offsetZ * 0.5)) * 1.1) * 50;
-
-
-				for(int step = 0; step < 3; step++) {
-					value = TUtils::lerp(beachFade,
-						value,
-						TUtils::terrace(
-							value,
-							TUtils::lerp(offsets[step * 2].GetNoise(x, y, z), 30, 50) * (1.0 - step * 0.2),
-							TUtils::lerp(offsets[step * 2 + 1].GetNoise(x, y, z) + step * 0.33, 0, 1),
-							0.0
-						));
-				}
-
-				chunk->gridData.SetCell(i, j, k, value);
+				chunk->gridData.SetCell(i, j, k, sampler0.Sample(x, y, z));
 
 			}
 		}
@@ -137,9 +93,10 @@ void ChunkDataGenerator::ChunkDataPass(Chunk* chunk, std::vector<Chunk*>& chunks
 	for(uint8_t k = 0; k < m_gridSize; k++) {
 		for(uint8_t j = 0; j < m_gridSize; j++) {
 			for(uint8_t i = 0; i < m_gridSize; i++) {
+
 				glm::lowp_vec3 normal = glm::normalize(glm::vec3(
 					(GetCellValue(i - 1, j, k, chunks) - GetCellValue(i + 1, j, k, chunks)),
-					(GetCellValue(i, j - 1, k, chunks) - GetCellValue(i, j + 1, k, chunks)),
+					(GetCellValue(i, j - 1, k, chunks) - GetCellValue(i, j + 1, k, chunks)) + 1.0f,
 					(GetCellValue(i, j, k - 1, chunks) - GetCellValue(i, j, k + 1, chunks))
 				));
 				chunk->gridData.SetDerivative(i, j, k, normal);
@@ -189,7 +146,7 @@ void ChunkDataGenerator::SurfacePass (Chunk* chunk, std::vector<Chunk*>& chunks)
 
 
 				float dotUp = glm::dot(glm::vec3(0, 1, 0), normal);
-				if(dotUp < 0.1f) {
+				if(dotUp < 0.2f) {
 					chunk->data.SetCellUnsafe(i, j, k, stone);
 					continue;
 				}

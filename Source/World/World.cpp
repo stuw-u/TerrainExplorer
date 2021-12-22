@@ -13,9 +13,18 @@ void World::Init () {
 	return;
 }
 
+World::~World () {
+	m_closeThread = true;
+	m_genThread.join();
+	delete m_blockAssetManager;
+}
+
 void World::OnUpdate () {
-	m_meshUpdateLock.lock();
-	for(auto pos : m_chunkToUpdateMesh) {
+
+	// Sends the mesh data to the GPU (aka "applies" it)
+	m_deleteCreateChunkLock.lock(); // Prevents the chunk we're working on from being deleted
+	m_meshApplyLock.lock();			// Prevents m_applyMeshQueue from being modified
+	for(auto& pos : m_applyMeshQueue) {
 		auto chunk_it = m_chunks.find(pos);
 		if(chunk_it == m_chunks.end()) continue;
 
@@ -28,21 +37,19 @@ void World::OnUpdate () {
 		chunk->SetMesh(mesh);
 		chunk->meshData.Dispose();
 	}
-	m_chunkToUpdateMesh.clear();
-	m_estimatedChunkInMeshQueue = 0;
-	m_meshUpdateLock.unlock();
+	m_applyMeshQueue.clear();
+	m_meshApplyLock.unlock();
+	m_deleteCreateChunkLock.unlock();
 
-	m_deleteLock.lock();
-	for(auto pos : m_chunkToDelete) {
-		auto chunk_it = m_chunks.find(pos);
-		if(chunk_it == m_chunks.end()) continue;
 
-		Chunk* chunk = chunk_it->second;
-		m_chunks.erase(pos);
-		delete chunk;
+	// Dispose meshes that are on the GPU from the main thread
+	m_disposeMeshQueueLock.lock(); // Prevents m_disposeMeshQueue from being edited
+	for(auto& mesh : m_disposeMeshQueue) {
+		mesh.Dispose();
 	}
-	m_chunkToDelete.clear();
-	m_deleteLock.unlock();
+	m_disposeMeshQueue.clear();
+	m_disposeMeshQueueLock.unlock();
+
 }
 
 void World::OnPlayerMove (glm::ivec3 position) {
@@ -68,10 +75,10 @@ void World::ThreadUpdate () {
 
 		// If we DONT'T have a position change
 		if(!m_chunkPosChangedSync.load()) {
-			
+
 			TryGeneratingMissingMesh();
 
-			std::this_thread::sleep_for(std::chrono::microseconds(50));
+			std::this_thread::sleep_for(std::chrono::microseconds(100));
 			continue;
 		}
 
@@ -79,8 +86,11 @@ void World::ThreadUpdate () {
 		glm::ivec3 chunkPos = m_lastChunkPosSync.load();
 		m_chunkPosChangedSync = false;
 
-		int boundXZ = 13;
-		int boundY = 5;
+
+
+		int boundXZ = 16;
+		int boundY = 6;
+
 
 		// Create a debug chunks for testing
 		// Generate grid data
@@ -103,19 +113,14 @@ void World::ThreadUpdate () {
 		index = RunForChunkInBound(boundXZ, boundY, chunkPos, 2, Chunk::State::Complete, Chunk::State::Sampling, &World::TrySurfacePassAndMesh);
 		surfaceMeshChrono.StopAndPrint("SurfacePass&MeshGeneration / Chunk : ", index);
 
-
 		UnloadFarChunks(chunkPos, boundXZ + 1, boundXZ + 1);
 
 
-		std::this_thread::sleep_for(std::chrono::microseconds(50));
+		std::this_thread::sleep_for(std::chrono::microseconds(100));
 	}
 }
 
-World::~World () {
-	m_closeThread = true;
-	m_genThread.join();
-	delete m_blockAssetManager;
-}
+
 
 Chunk* World::CreateChunk (glm::ivec3 chunkPos) {
 	Chunk* newChunk = new Chunk(CHUNK_SIZE, GRID_SIZE, chunkPos, m_blockAssetManager);
@@ -124,7 +129,7 @@ Chunk* World::CreateChunk (glm::ivec3 chunkPos) {
 }
 
 void World::Render(SurfaceShader& shader, const glm::mat4x4& viewProjection, const Frustum& frustum) {
-	m_deleteLock.lock();
+	m_deleteCreateChunkLock.lock();
 	for(auto& element : m_chunks) {
 		if(!element.second->CanRender()) {
 			continue;
@@ -133,7 +138,7 @@ void World::Render(SurfaceShader& shader, const glm::mat4x4& viewProjection, con
 			element.second->Render(shader, viewProjection);
 		}
 	}
-	m_deleteLock.unlock();
+	m_deleteCreateChunkLock.unlock();
 }
 
 std::vector<Chunk*> World::GetChunkNeighbours (glm::ivec3 chunkPosition, int& minState) {
@@ -217,11 +222,14 @@ int World::RunForChunkInBound (
 }
 
 
+
 void World::TryCreateAndFillChunk (int x, int y, int z) {
 	auto chunk_it = m_chunks.find(glm::ivec3(x, y, z));
 	if(chunk_it != m_chunks.end()) return;
 
+	m_deleteCreateChunkLock.lock();
 	Chunk* chunk = CreateChunk(glm::ivec3(x, y, z));
+	m_deleteCreateChunkLock.unlock();
 	m_chunkDataGenerator.GridDataPass(chunk);
 
 	chunk->state = Chunk::State::GridData;
@@ -239,11 +247,13 @@ void World::TrySurfacePassAndMesh(glm::ivec3 pos, Chunk* chunk, std::vector<Chun
 	chunk->state = Chunk::State::Surface;
 
 	// Check if mesh is allowed
-	int meshCount = m_estimatedChunkInMeshQueue.load();
-	if(meshCount >= MAX_MESH) {
+	m_meshApplyLock.lock();
+	int meshesInApplyQueue = m_applyMeshQueue.size();
+	m_meshApplyLock.unlock();
+	if(meshesInApplyQueue >= MAX_MESH_IN_APPLY_QUEUE) {
 
 		// We cannot, add to queue
-		m_missingMesh.push(pos);
+		m_missingMeshQueue.push(pos);
 		return;
 	}
 
@@ -252,49 +262,54 @@ void World::TrySurfacePassAndMesh(glm::ivec3 pos, Chunk* chunk, std::vector<Chun
 	chunk->state = Chunk::State::Complete;
 
 	// Request main thread to send mesh to GPU
-	m_meshUpdateLock.lock();
-	m_chunkToUpdateMesh.push_back(pos);
-	m_meshUpdateLock.unlock();
+	m_meshApplyLock.lock();
+	m_applyMeshQueue.push_back(pos);
+	m_meshApplyLock.unlock();
 }
 
 void World::TryGeneratingMissingMesh () {
 
-	int meshCount = m_estimatedChunkInMeshQueue.load();
-	int totalNewMesh = 0;
-	Chunk::State minState = Chunk::State::Sampling;
-
-	while(meshCount < MAX_MESH && m_missingMesh.size() > 0) {
+	// Get the amout of chunk that are awaiting the mesh to be uploaded to the GPU
+	m_meshApplyLock.lock();
+	int meshesInApplyQueue = m_applyMeshQueue.size();
+	m_meshApplyLock.unlock();
+	
+	// Check if there is chunk that are almost done generating but that don't have a mesh yet
+	// Only generate them a mesh if the memory limit hasn't been reached.
+	while(meshesInApplyQueue < MAX_MESH_IN_APPLY_QUEUE && m_missingMeshQueue.size() > 0) {
 		
 		// Find a reference to chunk with missing mesh
-		glm::ivec3 pos = m_missingMesh.front();
-		m_missingMesh.pop();
+		glm::ivec3 pos = m_missingMeshQueue.front();
+		m_missingMeshQueue.pop();
 
 		auto chunk_it = m_chunks.find(pos);
-		if(chunk_it != m_chunks.end()) return;
+		if(chunk_it == m_chunks.end()) continue;
 		Chunk* chunk = chunk_it->second;
+
+		if(chunk->state == Chunk::State::Complete) continue;
 
 		// Ensure neighbours are valid
 		int minNeighbourState = static_cast<int>(Chunk::State::Complete);
 		std::vector<Chunk*> neighbours = GetChunkNeighbours(pos, minNeighbourState);
-		if(minNeighbourState < static_cast<int>(minState)) { continue; } // Invalid neighbours
+		if(minNeighbourState < static_cast<int>(Chunk::State::Sampling)) continue; // Invalid neighbours
+
 
 		// Generate the mesh and change state
 		m_meshGenerator.GenerateChunkMesh(chunk, neighbours);
 		chunk->state = Chunk::State::Complete;
 
 		// Request main thread to send mesh to GPU
-		m_meshUpdateLock.lock();
-		m_chunkToUpdateMesh.push_back(pos);
-		m_meshUpdateLock.unlock();
+		m_meshApplyLock.lock();
+		m_applyMeshQueue.push_back(pos);
+		m_meshApplyLock.unlock();
 
-		meshCount++;
-		totalNewMesh++;
+		meshesInApplyQueue++;
 	}
-	m_estimatedChunkInMeshQueue += totalNewMesh;
 }
 
 void World::UnloadFarChunks (glm::ivec3 center, int maxRangeXZ, int maxRangeY) {
-	m_deleteLock.lock();
+	m_deleteCreateChunkLock.lock();
+	std::vector<glm::ivec3> m_chunkToDeleteQueue;
 	for(auto &element : m_chunks) {
 		glm::ivec3 pos = element.first;
 		int distX = glm::abs(center.x - pos.x);
@@ -302,8 +317,23 @@ void World::UnloadFarChunks (glm::ivec3 center, int maxRangeXZ, int maxRangeY) {
 		int distZ = glm::abs(center.z - pos.z);
 		
 		if(distY > maxRangeY || glm::max(distX, distZ) > maxRangeXZ) {
-			m_chunkToDelete.push_back(element.first);
+			m_chunkToDeleteQueue.push_back(element.first);
 		}
 	}
-	m_deleteLock.unlock();
+	m_disposeMeshQueueLock.lock();
+	for(auto pos : m_chunkToDeleteQueue) {
+		auto chunk_it = m_chunks.find(pos);
+		if(chunk_it == m_chunks.end()) {
+			std::cout << "Failed to delete chunk" << std::endl;
+			continue;
+		}
+
+		Chunk* chunk = chunk_it->second;
+		m_chunks.erase(pos);
+		m_disposeMeshQueue.push_back(chunk->GetMesh());
+		delete chunk;
+	}
+	m_disposeMeshQueueLock.unlock();
+	m_chunkToDeleteQueue.clear();
+	m_deleteCreateChunkLock.unlock();
 }
